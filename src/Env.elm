@@ -5,7 +5,7 @@ module Env exposing (..)
 
 
 dummyConfigItem =
-    ""
+    "x"
 
 
 authKey =
