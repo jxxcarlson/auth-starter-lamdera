@@ -2,4 +2,4 @@ module Config exposing (administrator)
 
 
 administrator =
-    "jxxcarlson"
+    "admin-user-name"
