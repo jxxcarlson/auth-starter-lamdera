@@ -68,7 +68,9 @@ updateFromFrontend sessionId clientId msg model =
                     if Authentication.verify username encryptedPassword model.authenticationDict then
                         ( model
                         , Cmd.batch
-                            [ sendToFrontend clientId (SendMessage <| "Success! You are signed in") ]
+                            [ sendToFrontend clientId (SendUser userData.user)
+                            , sendToFrontend clientId (SendMessage "Success! You are signed in.")
+                            ]
                         )
 
                     else
