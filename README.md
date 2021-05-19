@@ -1,3 +1,3 @@
-# CaYaTeX-Lamdera
+# Auth Starter Appp
 
-A Lamdera app for logging
+A starter app for Lamdera that has basic user authorization.
