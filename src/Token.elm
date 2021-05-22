@@ -10,29 +10,12 @@ get : Random.Seed -> { token : String, seed : Random.Seed }
 get seed_ =
     let
         { words, seed } =
-            randomWords seed_ 2 3
-
-        ( digits, newSeed ) =
-            Random.step (Random.Int.intGreaterThan 1000000) seed
-
-        digitString =
-            String.fromInt digits
-
-        a =
-            String.left 3 digitString
-
-        b =
-            String.left 3 (String.dropLeft 3 digitString)
+            randomWords seed_ 4 4
 
         token =
-            List.map2 (\alpha num -> String.left 2 alpha ++ num) words [ a, b ] |> String.join "-"
+            words |> String.join "-"
     in
-    { token = token, seed = newSeed }
-
-
-get_ : Random.Seed -> Int -> Int -> { token : String, seed : Random.Seed }
-get_ seed n wordLength =
-    randomWords seed n wordLength |> (\result -> { token = String.join "-" result.words, seed = result.seed })
+    { token = token, seed = seed }
 
 
 randomWords : Random.Seed -> Int -> Int -> { words : List String, seed : Random.Seed }

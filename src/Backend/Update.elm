@@ -60,7 +60,7 @@ setupUser model clientId username encryptedPassword =
             { username = username, id = tokenData.token, realname = "Undefined", email = "Undefined" }
 
         newAuthDict =
-            Authentication.insert user encryptedPassword model.authenticationDict
+            Authentication.insert user token encryptedPassword model.authenticationDict
     in
     ( { model | randomSeed = tokenData.seed, authenticationDict = newAuthDict }
     , Cmd.batch

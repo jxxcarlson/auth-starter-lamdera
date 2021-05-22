@@ -62,10 +62,10 @@ updateFromFrontend sessionId clientId msg model =
             ( model, sendToFrontend clientId (GotUsers (Authentication.users model.authenticationDict)) )
 
         -- USER
-        SignInOrSignUp username encryptedPassword ->
+        SignInOrSignUp username transitPassword ->
             case Dict.get username model.authenticationDict of
                 Just userData ->
-                    if Authentication.verify username encryptedPassword model.authenticationDict then
+                    if Authentication.verify username transitPassword model.authenticationDict then
                         ( model
                         , Cmd.batch
                             [ sendToFrontend clientId (SendUser userData.user)
@@ -77,4 +77,4 @@ updateFromFrontend sessionId clientId msg model =
                         ( model, sendToFrontend clientId (SendMessage <| "Sorry, password and username don't match") )
 
                 Nothing ->
-                    Backend.Update.setupUser model clientId username encryptedPassword
+                    Backend.Update.setupUser model clientId username transitPassword

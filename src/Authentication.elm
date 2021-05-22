@@ -33,7 +33,10 @@ import User exposing (User)
     { email = "fb@foo.io", id = "1122", realname = "Fred Barnes", username = "fred" }
         : { email : String, id : String, realname : String, username : String }
     > authDict2 = insert u "1234" passTransit authDict
-    Dict.fromList [("fred",{ hash = "12a941b42bcc15da068861f6e1bb383b8b5d961e3f317a1ddc6d8cc5007bfcbd", salt = "1234", user = { email = "fb@foo.io", id = "1122", realname = "Fred Barnes", username = "fred" } })]
+    Dict.fromList [("fred"
+       ,{ hash = "12a941b42bcc15da068861f6e1bb383b8b5d961e3f317a1ddc6d8cc5007bfcbd"
+       , salt = "1234"
+       , user = { email = "fb@foo.io", id = "1122", realname = "Fred Barnes", username = "fred" } })]
         : AuthenticationDict
     > verify "fred" passTransit authDict2
     True : Bool
@@ -70,7 +73,7 @@ encryptForTransit str =
 
 encrypt : String -> String -> String
 encrypt salt transitPassword =
-    Crypto.HMAC.digest sha256 Env.authKey (salt ++ transitPassword)
+    Crypto.HMAC.digest sha256 Env.backendAuthKey (salt ++ transitPassword)
 
 
 verify_ : String -> String -> String -> Bool
