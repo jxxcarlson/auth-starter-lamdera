@@ -8,5 +8,5 @@ transitKey =
     "Lord of the Rings"
 
 
-backendAuthKey: =
+backendAuthKey =
     "Crows are smart birds!"
