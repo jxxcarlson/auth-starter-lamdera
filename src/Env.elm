@@ -4,9 +4,9 @@ module Env exposing (..)
 -- See https://dashboard.lamdera.app/docs/environment for more info.
 
 
-dummyConfigItem =
-    "x"
+transitKey =
+    "Lord of the Rings"
 
 
 authKey =
-    "eqkzfABz7813-vhxvh(!)nlspm-aukemvz?/4$jhh-ekODVAZ891Qoaeaw"
+    "Crows are smart birds!"
