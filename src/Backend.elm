@@ -63,10 +63,6 @@ updateFromFrontend sessionId clientId msg model =
 
         -- USER
         SignInOrSignUp username transitPassword ->
-            let
-                _ =
-                    Debug.log "SignInOrSignUp" ( username, transitPassword )
-            in
             case Dict.get username model.authenticationDict of
                 Just userData ->
                     if Authentication.verify username transitPassword model.authenticationDict then
