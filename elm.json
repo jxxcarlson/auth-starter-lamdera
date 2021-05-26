@@ -33,7 +33,8 @@
             "lamdera/codecs": "1.0.0",
             "lamdera/core": "1.0.0",
             "mdgriffith/elm-ui": "1.1.8",
-            "romariolopezc/elm-hmac-sha1": "3.0.0"
+            "romariolopezc/elm-hmac-sha1": "3.0.0",
+            "rtfeldman/elm-hex": "1.0.0"
         },
         "indirect": {
             "TSFoster/elm-bytes-extra": "1.3.0",
@@ -51,7 +52,6 @@
             "ktonon/elm-word": "2.1.2",
             "mpizenberg/elm-pointer-events": "4.0.2",
             "pilatch/flip": "1.0.0",
-            "rtfeldman/elm-hex": "1.0.0",
             "toastal/either": "3.5.2",
             "zwilias/elm-utf-tools": "2.0.1"
         }

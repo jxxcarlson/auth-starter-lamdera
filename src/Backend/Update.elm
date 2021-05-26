@@ -4,6 +4,7 @@ module Backend.Update exposing
     )
 
 import Authentication
+import Hex
 import Lamdera exposing (ClientId, broadcast, sendToFrontend)
 import Random
 import Token
@@ -48,23 +49,28 @@ gotAtomsphericRandomNumber model result =
 
 
 setupUser : Model -> ClientId -> String -> String -> ( BackendModel, Cmd BackendMsg )
-setupUser model clientId username encryptedPassword =
+setupUser model clientId username transitPassword =
     let
-        { token, seed } =
-            Token.get model.randomSeed
+        ( randInt, seed ) =
+            Random.step (Random.int (Random.minInt // 2) Random.maxInt) model.randomSeed
+
+        randomHex =
+            Hex.toString randInt |> String.toUpper
 
         tokenData =
             Token.get seed
 
         user =
             { username = username, id = tokenData.token, realname = "Undefined", email = "Undefined" }
-
-        newAuthDict =
-            Authentication.insert user token encryptedPassword model.authenticationDict
     in
-    ( { model | randomSeed = tokenData.seed, authenticationDict = newAuthDict }
-    , Cmd.batch
-        [ sendToFrontend clientId (SendMessage "Success! You have set up your account")
-        , sendToFrontend clientId (SendUser user)
-        ]
-    )
+    case Authentication.insert user randomHex transitPassword model.authenticationDict of
+        Err str ->
+            ( { model | randomSeed = seed }, sendToFrontend clientId (SendMessage ("Error: " ++ str)) )
+
+        Ok authDict ->
+            ( { model | randomSeed = seed, authenticationDict = authDict }
+            , Cmd.batch
+                [ sendToFrontend clientId (SendMessage "Success! You have set up your account")
+                , sendToFrontend clientId (SendUser user)
+                ]
+            )
