@@ -6,11 +6,9 @@ module View.Utility exposing
     , showIfIsAdmin
     )
 
-import Browser.Dom as Dom
 import Element exposing (Element)
 import Html
 import Html.Attributes as HA
-import Task exposing (Task)
 import Types exposing (FrontendModel, FrontendMsg)
 
 

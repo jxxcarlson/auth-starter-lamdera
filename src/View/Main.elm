@@ -1,5 +1,6 @@
 module View.Main exposing (view)
 
+import Config
 import Element as E exposing (Element)
 import Element.Background as Background
 import Element.Font as Font
@@ -20,7 +21,7 @@ type alias Model =
 view : Model -> Html FrontendMsg
 view model =
     E.layoutWith { options = [ E.focusStyle View.Utility.noFocus ] }
-        [ View.Style.bgGray 0.9, E.clipX, E.clipY ]
+        [ View.Style.bgGray 0.2, E.clipX, E.clipY ]
         (mainColumn model)
 
 
@@ -28,11 +29,10 @@ mainColumn : Model -> Element FrontendMsg
 mainColumn model =
     E.column (mainColumnStyle model)
         [ E.column [ E.spacing 12, E.width (E.px <| appWidth_ model), E.height (E.px (appHeight_ model)) ]
-            [ title "App"
+            [ title "Auth Starter App"
             , header model
-            , E.column [ E.spacing 12 ]
-                [ E.row [ E.spacing 12 ]
-                    [ E.el [ Font.color Color.white ] (E.text "MAIN COLUMN") ]
+            , E.column [ E.spacing 12, Font.color Color.white ]
+                [ E.text "Put something here!"
                 ]
             , footer model
             ]
@@ -44,7 +44,7 @@ footer model =
         [ E.spacing 12
         , E.paddingXY 0 8
         , E.height (E.px 25)
-        , E.width (E.px (2 * panelWidth_ model + 246))
+        , E.width (E.px <| appWidth_ model)
         , Font.size 14
         , E.inFront (View.Popup.admin model)
         ]
@@ -63,10 +63,6 @@ messageRow model =
         , View.Style.fgGray 1.0
         ]
         [ E.text model.message ]
-
-
-footerButtons model =
-    E.row [ E.width (E.px (panelWidth_ model)), E.spacing 12 ] []
 
 
 header model =
@@ -97,76 +93,16 @@ signedInHeader model user =
         ]
 
 
-docsInfo model n =
-    let
-        total =
-            List.length model.documents
-    in
-    E.el
-        [ E.height (E.px 30)
-        , E.width (E.px docListWidth)
-        , Font.size 16
-        , E.paddingXY 12 7
-        , Background.color Color.paleViolet
-        , Font.color Color.lightBlue
-        ]
-        (E.text <| "filtered/fetched = " ++ String.fromInt n ++ "/" ++ String.fromInt total)
-
-
-docList_ : Model -> List (Element FrontendMsg) -> Element FrontendMsg
-docList_ model filteredDocs =
-    E.column
-        [ View.Style.bgGray 0.85
-        , E.height (E.px (panelHeight_ model - searchDocPaneHeight))
-        , E.spacing 4
-        , E.width (E.px docListWidth)
-        , E.paddingXY 8 12
-        , Background.color Color.paleViolet
-        , E.scrollbarY
-        ]
-        filteredDocs
-
-
-viewDummy : Model -> Element FrontendMsg
-viewDummy model =
-    E.column
-        [ E.paddingEach { left = 24, right = 24, top = 12, bottom = 96 }
-        , Background.color Color.veryPaleBlue
-        , E.width (E.px (panelWidth_ model))
-        , E.height (E.px (panelHeight_ model))
-        , E.centerX
-        , Font.size 14
-        , E.alignTop
-        ]
-        []
-
-
 
 -- DIMENSIONS
-
-
-searchDocPaneHeight =
-    70
-
-
-panelWidth_ model =
-    min 600 ((model.windowWidth - 100 - docListWidth) // 2)
-
-
-docListWidth =
-    220
 
 
 appHeight_ model =
     model.windowHeight - 100
 
 
-panelHeight_ model =
-    appHeight_ model - 110
-
-
 appWidth_ model =
-    2 * panelWidth_ model + docListWidth + 15
+    min Config.maximumAppWidth model.windowWidth
 
 
 mainColumnStyle model =
@@ -181,4 +117,4 @@ mainColumnStyle model =
 
 title : String -> Element msg
 title str =
-    E.row [ E.centerX, View.Style.fgGray 0.9 ] [ E.text str ]
+    E.row [ E.paddingEach { top = 0, bottom = 8, left = 0, right = 0 }, E.centerX, View.Style.fgGray 0.9 ] [ E.text str ]

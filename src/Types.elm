@@ -6,14 +6,21 @@ import Browser.Dom as Dom
 import Browser.Navigation exposing (Key)
 import Http
 import Random
+import Time
 import Url exposing (Url)
 import User exposing (User)
+
+
+type alias Username =
+    String
 
 
 type alias FrontendModel =
     { key : Key
     , url : Url
     , message : String
+    , currentTime : Time.Posix
+    , randomSeed : Random.Seed
 
     -- ADMIN
     , users : List User
@@ -42,10 +49,10 @@ type PopupStatus
 type alias BackendModel =
     { message : String
 
-    -- RANDOM
+    -- SYSTEM
     , randomSeed : Random.Seed
-    , uuidCount : Int
     , randomAtmosphericInt : Maybe Int
+    , currentTime : Time.Posix
 
     -- USER
     , authenticationDict : AuthenticationDict
@@ -57,6 +64,8 @@ type FrontendMsg
     | UrlChanged Url
     | GotViewport Dom.Viewport
     | NoOpFrontendMsg
+    | FETick Time.Posix
+    | GotAtomsphericRandomNumberFE (Result Http.Error String)
       -- UI
     | GotNewWindowDimensions Int Int
     | ChangePopupStatus PopupStatus
@@ -82,6 +91,7 @@ type ToBackend
 type BackendMsg
     = NoOpBackendMsg
     | GotAtomsphericRandomNumber (Result Http.Error String)
+    | Tick Time.Posix
 
 
 type ToFrontend

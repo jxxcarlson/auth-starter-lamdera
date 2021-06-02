@@ -6,6 +6,7 @@ import Backend.Update
 import Dict
 import Lamdera exposing (ClientId, SessionId, sendToFrontend)
 import Random
+import Time
 import Types exposing (..)
 
 
@@ -18,8 +19,13 @@ app =
         { init = init
         , update = update
         , updateFromFrontend = updateFromFrontend
-        , subscriptions = \m -> Sub.none
+        , subscriptions = subscriptions
         }
+
+
+subscriptions : Model -> Sub BackendMsg
+subscriptions model =
+    Time.every 1000 Tick
 
 
 init : ( Model, Cmd BackendMsg )
@@ -27,9 +33,9 @@ init =
     ( { message = "Hello!"
 
       -- RANDOM
-      , randomSeed = Random.initialSeed 1234
-      , uuidCount = 0
+      , randomSeed = Random.initialSeed 12034
       , randomAtmosphericInt = Nothing
+      , currentTime = Time.millisToPosix 0
 
       -- USER
       , authenticationDict = Dict.empty
@@ -46,6 +52,9 @@ update msg model =
 
         GotAtomsphericRandomNumber result ->
             Backend.Update.gotAtomsphericRandomNumber model result
+
+        Tick time ->
+            ( { model | currentTime = time }, Cmd.none )
 
 
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
@@ -69,7 +78,11 @@ updateFromFrontend sessionId clientId msg model =
                         ( model
                         , Cmd.batch
                             [ sendToFrontend clientId (SendUser userData.user)
-                            , sendToFrontend clientId (SendMessage "Success! You are signed in.")
+                            , sendToFrontend clientId
+                                (SendMessage <|
+                                    "Success! Random atmospheric integer: "
+                                        ++ (Maybe.map String.fromInt model.randomAtmosphericInt |> Maybe.withDefault "NONE")
+                                )
                             ]
                         )
 
